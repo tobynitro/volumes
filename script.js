@@ -1,0 +1,336 @@
+/* ============================================================
+   BLOG ENGINE
+
+   This is the JavaScript that powers everything.
+   You probably don't need to edit this unless you want to
+   add features.
+
+   How it works:
+   1. Loads posts.json to get the list of posts
+   2. Checks the URL hash to decide what to show
+   3. Either shows the post list or fetches/renders a single post
+============================================================ */
+
+(function() {
+    'use strict';
+
+    // ============================================================
+    // CONFIGURATION
+    // ============================================================
+    const CONFIG = {
+        postsFile: 'posts.json',      // Where the post manifest lives
+        postsDir: 'posts/',           // Where .md files live
+        dateFormat: {                  // How dates are displayed
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        }
+    };
+
+    // Store for loaded posts data
+    let postsData = null;
+
+    // ============================================================
+    // MARKDOWN PARSER
+    //
+    // A tiny, zero-dependency markdown parser.
+    // Handles: headings, bold, italic, links, images, code,
+    //          lists, blockquotes, horizontal rules, paragraphs
+    //
+    // For a daily blog, this covers 99% of what you'll write.
+    // If you need more features, you can swap this out for
+    // marked.js by adding: <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js">
+    // and replacing parseMarkdown(text) with marked.parse(text)
+    // ============================================================
+    function parseMarkdown(text) {
+        // Normalize line endings
+        text = text.replace(/\r\n/g, '\n');
+
+        // Store code blocks to protect them from other parsing
+        const codeBlocks = [];
+        text = text.replace(/```(\w*)\n([\s\S]*?)```/g, (match, lang, code) => {
+            codeBlocks.push(`<pre><code class="language-${lang}">${escapeHtml(code.trim())}</code></pre>`);
+            return `%%CODEBLOCK${codeBlocks.length - 1}%%`;
+        });
+
+        // Inline code (protect from other parsing)
+        const inlineCodes = [];
+        text = text.replace(/`([^`]+)`/g, (match, code) => {
+            inlineCodes.push(`<code>${escapeHtml(code)}</code>`);
+            return `%%INLINECODE${inlineCodes.length - 1}%%`;
+        });
+
+        // Split into lines for block-level parsing
+        const lines = text.split('\n');
+        let html = '';
+        let inList = false;
+        let listType = '';
+        let inBlockquote = false;
+        let blockquoteContent = [];
+
+        for (let i = 0; i < lines.length; i++) {
+            let line = lines[i];
+
+            // Headings
+            if (line.match(/^#{1,6}\s/)) {
+                if (inList) { html += `</${listType}>`; inList = false; }
+                if (inBlockquote) { html += `<blockquote><p>${parseInline(blockquoteContent.join(' '))}</p></blockquote>`; inBlockquote = false; blockquoteContent = []; }
+                const level = line.match(/^(#+)/)[1].length;
+                const content = line.replace(/^#+\s*/, '');
+                html += `<h${level}>${parseInline(content)}</h${level}>\n`;
+                continue;
+            }
+
+            // Horizontal rule
+            if (line.match(/^(-{3,}|\*{3,}|_{3,})$/)) {
+                if (inList) { html += `</${listType}>`; inList = false; }
+                if (inBlockquote) { html += `<blockquote><p>${parseInline(blockquoteContent.join(' '))}</p></blockquote>`; inBlockquote = false; blockquoteContent = []; }
+                html += '<hr>\n';
+                continue;
+            }
+
+            // Blockquote
+            if (line.match(/^>\s?/)) {
+                if (inList) { html += `</${listType}>`; inList = false; }
+                inBlockquote = true;
+                blockquoteContent.push(line.replace(/^>\s?/, ''));
+                continue;
+            } else if (inBlockquote) {
+                html += `<blockquote><p>${parseInline(blockquoteContent.join(' '))}</p></blockquote>\n`;
+                inBlockquote = false;
+                blockquoteContent = [];
+            }
+
+            // Unordered list
+            if (line.match(/^[\*\-]\s/)) {
+                if (!inList || listType !== 'ul') {
+                    if (inList) html += `</${listType}>`;
+                    html += '<ul>';
+                    inList = true;
+                    listType = 'ul';
+                }
+                html += `<li>${parseInline(line.replace(/^[\*\-]\s/, ''))}</li>`;
+                continue;
+            }
+
+            // Ordered list
+            if (line.match(/^\d+\.\s/)) {
+                if (!inList || listType !== 'ol') {
+                    if (inList) html += `</${listType}>`;
+                    html += '<ol>';
+                    inList = true;
+                    listType = 'ol';
+                }
+                html += `<li>${parseInline(line.replace(/^\d+\.\s/, ''))}</li>`;
+                continue;
+            }
+
+            // Close list if we hit a non-list line
+            if (inList && line.trim() === '') {
+                html += `</${listType}>\n`;
+                inList = false;
+                continue;
+            }
+
+            // Code block placeholder (restore later)
+            if (line.match(/%%CODEBLOCK\d+%%/)) {
+                if (inList) { html += `</${listType}>`; inList = false; }
+                html += line + '\n';
+                continue;
+            }
+
+            // Paragraph
+            if (line.trim() !== '') {
+                if (inList) { html += `</${listType}>`; inList = false; }
+                html += `<p>${parseInline(line)}</p>\n`;
+            }
+        }
+
+        // Close any open elements
+        if (inList) html += `</${listType}>`;
+        if (inBlockquote) html += `<blockquote><p>${parseInline(blockquoteContent.join(' '))}</p></blockquote>`;
+
+        // Restore code blocks
+        codeBlocks.forEach((block, i) => {
+            html = html.replace(`%%CODEBLOCK${i}%%`, block);
+        });
+
+        // Restore inline code
+        inlineCodes.forEach((code, i) => {
+            html = html.replace(`%%INLINECODE${i}%%`, code);
+        });
+
+        return html;
+    }
+
+    // Parse inline elements (bold, italic, links, images)
+    function parseInline(text) {
+        // Images: ![alt](src)
+        text = text.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1">');
+
+        // Links: [text](url)
+        text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+
+        // Bold: **text** or __text__
+        text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+        text = text.replace(/__([^_]+)__/g, '<strong>$1</strong>');
+
+        // Italic: *text* or _text_
+        text = text.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+        text = text.replace(/_([^_]+)_/g, '<em>$1</em>');
+
+        return text;
+    }
+
+    // Escape HTML entities
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // ============================================================
+    // DATE FORMATTING
+    // ============================================================
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-GB', CONFIG.dateFormat);
+    }
+
+    // ============================================================
+    // ROUTING
+    // Determines what to show based on URL hash
+    // ============================================================
+    function getRoute() {
+        const hash = window.location.hash.slice(1); // Remove the #
+        return hash || null; // null means show homepage
+    }
+
+    // ============================================================
+    // RENDER POST LIST (homepage)
+    // ============================================================
+    function renderPostList(posts) {
+        if (posts.length === 0) {
+            return '<p class="loading">No posts yet. Add your first post!</p>';
+        }
+
+        const items = posts.map(post => `
+            <li class="post-list-item">
+                <a href="#${post.slug}" class="post-list-link">${escapeHtml(post.title)}</a>
+                <span class="post-list-date">${formatDate(post.date)}</span>
+            </li>
+        `).join('');
+
+        return `<ul class="post-list">${items}</ul>`;
+    }
+
+    // ============================================================
+    // RENDER SINGLE POST
+    // ============================================================
+    function renderPost(post, content, prevPost, nextPost) {
+        const nav = `
+            <nav class="post-nav">
+                ${prevPost
+                    ? `<a href="#${prevPost.slug}" class="post-nav-prev">${escapeHtml(prevPost.title)}</a>`
+                    : '<span class="post-nav-placeholder">Previous</span>'
+                }
+                ${nextPost
+                    ? `<a href="#${nextPost.slug}" class="post-nav-next">${escapeHtml(nextPost.title)}</a>`
+                    : '<span class="post-nav-placeholder">Next</span>'
+                }
+            </nav>
+        `;
+
+        return `
+            <article>
+                <header class="post-header">
+                    <h1 class="post-title">${escapeHtml(post.title)}</h1>
+                    <time class="post-date">${formatDate(post.date)}</time>
+                </header>
+                <div class="post-content">
+                    ${parseMarkdown(content)}
+                </div>
+                ${nav}
+            </article>
+        `;
+    }
+
+    // ============================================================
+    // FETCH AND DISPLAY CONTENT
+    // ============================================================
+    async function loadPosts() {
+        if (postsData) return postsData;
+
+        try {
+            const response = await fetch(CONFIG.postsFile);
+            if (!response.ok) throw new Error('Could not load posts');
+            postsData = await response.json();
+            // Sort by date, newest first
+            postsData.sort((a, b) => new Date(b.date) - new Date(a.date));
+            return postsData;
+        } catch (error) {
+            console.error('Error loading posts:', error);
+            throw error;
+        }
+    }
+
+    async function loadPostContent(slug) {
+        try {
+            const response = await fetch(`${CONFIG.postsDir}${slug}.md`);
+            if (!response.ok) throw new Error('Post not found');
+            return await response.text();
+        } catch (error) {
+            console.error('Error loading post:', error);
+            throw error;
+        }
+    }
+
+    async function render() {
+        const content = document.getElementById('content');
+        const slug = getRoute();
+
+        try {
+            const posts = await loadPosts();
+
+            if (!slug) {
+                // Show post list
+                content.innerHTML = renderPostList(posts);
+                document.title = 'Toby Nitro'; // Change to your blog name
+            } else {
+                // Find and show single post
+                const postIndex = posts.findIndex(p => p.slug === slug);
+
+                if (postIndex === -1) {
+                    content.innerHTML = '<p class="error">Post not found</p>';
+                    return;
+                }
+
+                const post = posts[postIndex];
+                const postContent = await loadPostContent(slug);
+
+                // Get prev/next posts (remember: array is newest-first)
+                const prevPost = posts[postIndex + 1] || null; // Older post
+                const nextPost = posts[postIndex - 1] || null; // Newer post
+
+                content.innerHTML = renderPost(post, postContent, prevPost, nextPost);
+                document.title = `${post.title} — Toby Nitro`; // Change to your blog name
+
+                // Scroll to top when viewing a post
+                window.scrollTo(0, 0);
+            }
+        } catch (error) {
+            content.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+        }
+    }
+
+    // ============================================================
+    // INITIALISE
+    // ============================================================
+
+    // Re-render when URL hash changes
+    window.addEventListener('hashchange', render);
+
+    // Initial render
+    render();
+
+})();
