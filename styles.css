@@ -1,0 +1,319 @@
+/* ============================================================
+   CSS VARIABLES - EDIT THESE TO CHANGE YOUR BLOG'S LOOK
+
+   This is the easiest place to customise colors, fonts, and spacing.
+   Change these values and the whole site updates.
+============================================================ */
+:root {
+    /* -- COLORS -- */
+    --color-bg: #ffffff;              /* Page background */
+    --color-text: #1a1a1a;            /* Main text color */
+    --color-text-muted: #666666;      /* Secondary text (dates, meta) */
+    --color-link: #0066cc;            /* Link color */
+    --color-link-hover: #004499;      /* Link hover color */
+    --color-border: #e0e0e0;          /* Borders and dividers */
+    --color-code-bg: #f5f5f5;         /* Code block background */
+    --color-accent: #0066cc;          /* Accent color for highlights */
+
+    /* -- TYPOGRAPHY -- */
+    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    --font-heading: var(--font-body); /* Same as body, change if you want different */
+    --font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+
+    --font-size-base: 18px;           /* Base font size */
+    --font-size-small: 14px;          /* Small text */
+    --font-size-h1: 2rem;             /* Post titles */
+    --font-size-h2: 1.5rem;           /* Section headings */
+    --font-size-h3: 1.25rem;          /* Sub-section headings */
+
+    --line-height: 1.7;               /* Line spacing for readability */
+
+    /* -- LAYOUT -- */
+    --content-width: 600px;           /* Max width of content */
+    --spacing-unit: 1.5rem;           /* Base spacing unit */
+}
+
+/* ============================================================
+   DARK MODE (optional)
+
+   Uncomment this block to enable automatic dark mode based on
+   the user's system preference. Or delete it if you don't want it.
+============================================================ */
+/*
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-bg: #1a1a1a;
+        --color-text: #e0e0e0;
+        --color-text-muted: #999999;
+        --color-link: #6db3f2;
+        --color-link-hover: #9ecbf7;
+        --color-border: #333333;
+        --color-code-bg: #2d2d2d;
+    }
+}
+*/
+
+/* ============================================================
+   BASE STYLES
+   You probably don't need to edit below this line unless you
+   want to change the actual layout structure.
+============================================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: var(--font-size-base);
+}
+
+body {
+    font-family: var(--font-body);
+    line-height: var(--line-height);
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    padding: var(--spacing-unit);
+}
+
+/* ============================================================
+   LAYOUT CONTAINER
+   Centers content and constrains to max-width
+============================================================ */
+.container {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: var(--spacing-unit) 0;
+}
+
+/* ============================================================
+   HEADER
+   Edit the HTML below to change your logo/title
+============================================================ */
+.site-header {
+    text-align: center;
+    margin-bottom: calc(var(--spacing-unit) * 2);
+    padding-bottom: var(--spacing-unit);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.site-logo {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    /* If using an image logo, style it here */
+}
+
+.site-title {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-h1);
+    font-weight: 700;
+    color: var(--color-text);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.site-title:hover {
+    color: var(--color-link);
+}
+
+.site-tagline {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-small);
+    margin-top: 0.25rem;
+}
+
+/* ============================================================
+   POST LIST (homepage)
+============================================================ */
+.post-list {
+    list-style: none;
+}
+
+.post-list-item {
+    padding: var(--spacing-unit) 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.post-list-item:last-child {
+    border-bottom: none;
+}
+
+.post-list-link {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.post-list-link:hover {
+    color: var(--color-link);
+}
+
+.post-list-date {
+    display: block;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-small);
+    margin-top: 0.25rem;
+}
+
+/* ============================================================
+   SINGLE POST VIEW
+============================================================ */
+.post-header {
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
+}
+
+.post-title {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-h1);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.post-date {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-small);
+}
+
+/* ============================================================
+   POST CONTENT - Markdown rendered styles
+============================================================ */
+.post-content h1 { font-size: var(--font-size-h1); margin: 2rem 0 1rem; }
+.post-content h2 { font-size: var(--font-size-h2); margin: 1.75rem 0 0.75rem; }
+.post-content h3 { font-size: var(--font-size-h3); margin: 1.5rem 0 0.5rem; }
+
+.post-content p {
+    margin-bottom: var(--spacing-unit);
+}
+
+.post-content a {
+    color: var(--color-link);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.post-content a:hover {
+    color: var(--color-link-hover);
+}
+
+.post-content strong {
+    font-weight: 600;
+}
+
+.post-content em {
+    font-style: italic;
+}
+
+.post-content ul,
+.post-content ol {
+    margin-bottom: var(--spacing-unit);
+    padding-left: 1.5rem;
+}
+
+.post-content li {
+    margin-bottom: 0.5rem;
+}
+
+.post-content blockquote {
+    border-left: 3px solid var(--color-accent);
+    padding-left: var(--spacing-unit);
+    margin: var(--spacing-unit) 0;
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+.post-content code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background-color: var(--color-code-bg);
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+}
+
+.post-content pre {
+    background-color: var(--color-code-bg);
+    padding: var(--spacing-unit);
+    border-radius: 4px;
+    overflow-x: auto;
+    margin-bottom: var(--spacing-unit);
+}
+
+.post-content pre code {
+    background: none;
+    padding: 0;
+}
+
+.post-content hr {
+    border: none;
+    border-top: 1px solid var(--color-border);
+    margin: calc(var(--spacing-unit) * 2) 0;
+}
+
+.post-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+/* ============================================================
+   NAVIGATION (back/next)
+============================================================ */
+.post-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: calc(var(--spacing-unit) * 2);
+    padding-top: var(--spacing-unit);
+    border-top: 1px solid var(--color-border);
+    font-size: var(--font-size-small);
+}
+
+.post-nav a {
+    color: var(--color-link);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.post-nav a:hover {
+    text-decoration: underline;
+}
+
+.post-nav-prev::before {
+    content: '← ';
+}
+
+.post-nav-next::after {
+    content: ' →';
+}
+
+/* Empty placeholder to maintain layout */
+.post-nav-placeholder {
+    visibility: hidden;
+}
+
+/* ============================================================
+   FOOTER
+============================================================ */
+.site-footer {
+    margin-top: calc(var(--spacing-unit) * 2);
+    padding-top: var(--spacing-unit);
+    border-top: 1px solid var(--color-border);
+    text-align: center;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-small);
+}
+
+/* ============================================================
+   LOADING & ERROR STATES
+============================================================ */
+.loading {
+    text-align: center;
+    color: var(--color-text-muted);
+    padding: calc(var(--spacing-unit) * 2);
+}
+
+.error {
+    text-align: center;
+    color: #cc0000;
+    padding: calc(var(--spacing-unit) * 2);
+}
