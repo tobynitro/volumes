@@ -217,11 +217,10 @@
         const items = posts.map(post => `
             <li class="post-list-item">
                 <a href="#${post.slug}" class="post-list-link">${escapeHtml(post.title)}</a>
-                <span class="post-list-date">${formatDate(post.date)}</span>
             </li>
         `).join('');
 
-        return `<ul class="post-list">${items}</ul>`;
+        return `<ol class="post-list">${items}</ol>`;
     }
 
     // ============================================================
