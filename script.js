@@ -19,12 +19,7 @@
     // ============================================================
     const CONFIG = {
         postsFile: 'posts.json',      // Where the post manifest lives
-        postsDir: 'posts/',           // Where .md files live
-        dateFormat: {                  // How dates are displayed
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        }
+        postsDir: 'posts/'            // Where .md files live
     };
 
     // Store for loaded posts data
@@ -190,14 +185,6 @@
     }
 
     // ============================================================
-    // DATE FORMATTING
-    // ============================================================
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-GB', CONFIG.dateFormat);
-    }
-
-    // ============================================================
     // ROUTING
     // Determines what to show based on URL hash
     // ============================================================
@@ -214,13 +201,50 @@
             return '<p class="loading">No posts yet. Add your first post!</p>';
         }
 
-        const items = posts.map(post => `
-            <li class="post-list-item">
-                <a href="#${post.slug}" class="post-list-link">${escapeHtml(post.title)}</a>
-            </li>
-        `).join('');
+        // Group posts by chapter
+        const chapters = {};
+        posts.forEach(post => {
+            const chapter = post.chapter || 'Uncategorized';
+            if (!chapters[chapter]) {
+                chapters[chapter] = {
+                    posts: [],
+                    order: post.chapterOrder || 999 // Default to end if not specified
+                };
+            }
+            chapters[chapter].posts.push(post);
+        });
 
-        return `<ol class="post-list">${items}</ol>`;
+        // Sort chapters by chapterOrder
+        const sortedChapters = Object.entries(chapters).sort((a, b) => a[1].order - b[1].order);
+
+        // Render each chapter with accordion
+        const chevronIcon = `<svg class="chapter-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 10L12 14L8 10" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"/></svg>`;
+
+        const chaptersHtml = sortedChapters.map(([chapterName, chapterData]) => {
+            const chapterPosts = chapterData.posts;
+            const items = chapterPosts.map(post => `
+                <li class="post-list-item">
+                    <a href="#${post.slug}" class="post-list-link">${escapeHtml(post.title)}</a>
+                </li>
+            `).join('');
+
+            return `
+                <div class="chapter expanded">
+                    <h2 class="chapter-heading" onclick="toggleChapter(this)">
+                        ${chapterData.order}. ${escapeHtml(chapterName)}
+                        <span class="chapter-meta">
+                            <span class="chapter-count">${chapterPosts.length}</span>
+                            ${chevronIcon}
+                        </span>
+                    </h2>
+                    <ol class="post-list chapter-content">
+                        ${items}
+                    </ol>
+                </div>
+            `;
+        }).join('');
+
+        return chaptersHtml;
     }
 
     // ============================================================
@@ -240,12 +264,13 @@
             </nav>
         `;
 
+        const heroImage = post.thumbnail
+            ? `<img src="${escapeHtml(post.thumbnail)}" alt="${escapeHtml(post.title)}" class="post-hero">`
+            : '';
+
         return `
             <article>
-                <header class="post-header">
-                    <h1 class="post-title">${escapeHtml(post.title)}</h1>
-                    <time class="post-date">${formatDate(post.date)}</time>
-                </header>
+                ${heroImage}
                 <div class="post-content">
                     ${parseMarkdown(content)}
                 </div>
@@ -262,7 +287,7 @@
 
         try {
             const response = await fetch(CONFIG.postsFile);
-            if (!response.ok) throw new Error('Could not load posts');
+            if (!response.ok) throw new Error('Hmmm, wierd! I was unable to load any posts.');
             postsData = await response.json();
             // Sort by date, newest first
             postsData.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -286,13 +311,22 @@
 
     async function render() {
         const content = document.getElementById('content');
+        let header = document.querySelector('.home-header, .blog-header');
         const slug = getRoute();
 
         try {
             const posts = await loadPosts();
 
             if (!slug) {
-                // Show post list
+                // Show post list - ensure home header
+                if (!header || !header.classList.contains('home-header')) {
+                    header = document.querySelector('header');
+                    header.className = 'home-header';
+                }
+                header.innerHTML = `
+                    <a href="/" class="site-title">Building Toby Nitro</a>
+                    <p class="site-tagline">Documenting the journey from software, to hardware.</p>
+                `;
                 content.innerHTML = renderPostList(posts);
                 document.title = 'Toby Nitro'; // Change to your blog name
             } else {
@@ -306,6 +340,23 @@
 
                 const post = posts[postIndex];
                 const postContent = await loadPostContent(slug);
+
+                // Switch to blog header
+                if (!header || !header.classList.contains('blog-header')) {
+                    header = document.querySelector('header');
+                    header.className = 'blog-header';
+                }
+
+                // Update header with post title and description
+                header.innerHTML = `
+                    <a href="/" class="back-button" aria-label="Back to home">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                    <h1 class="post-title">${escapeHtml(post.title)}</h1>
+                    <p class="post-description">${escapeHtml(post.description || '')}</p>
+                `;
 
                 // Get prev/next posts (remember: array is newest-first)
                 const prevPost = posts[postIndex + 1] || null; // Older post
@@ -321,6 +372,34 @@
             content.innerHTML = `<p class="error">Error: ${error.message}</p>`;
         }
     }
+
+    // ============================================================
+    // ACCORDION FUNCTIONALITY
+    // ============================================================
+    window.toggleChapter = function(heading) {
+        const chapter = heading.parentElement;
+        const items = chapter.querySelectorAll('.post-list-item');
+        const isExpanding = !chapter.classList.contains('expanded');
+        const delayIncrement = 0.067; // ~67ms between each item (slowed by 1/3)
+
+        // Set staggered delays for each item
+        items.forEach((item, index) => {
+            if (isExpanding) {
+                // Expanding: top to bottom (0, 1, 2, 3...)
+                item.style.transitionDelay = `${index * delayIncrement}s`;
+            } else {
+                // Collapsing: bottom to top (reverse order)
+                item.style.transitionDelay = `${(items.length - 1 - index) * delayIncrement}s`;
+            }
+        });
+
+        // Toggle the expanded class
+        if (isExpanding) {
+            chapter.classList.add('expanded');
+        } else {
+            chapter.classList.remove('expanded');
+        }
+    };
 
     // ============================================================
     // INITIALISE

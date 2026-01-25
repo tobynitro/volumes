@@ -1,12 +1,56 @@
 [
     {
         "slug": "2025-01-23-hello-world",
-        "title": "Hello World",
-        "date": "2025-01-23"
+        "title": "Understanding Electricity",
+        "description": "Add your description here",
+        "date": "2025-01-23",
+        "chapter": "Introduction",
+        "chapterOrder": 1,
+        "thumbnail": "/images/IMG_1246.JPG"
+    },
+    {
+        "slug": "2025-01-23-hello-world",
+        "title": "What does PCB actually stand for?",
+        "description": "Add your description here",
+        "date": "2025-01-23",
+        "chapter": "Introduction",
+        "chapterOrder": 1,
+        "thumbnail": "/images/IMG_1258.JPG"
+    },
+    {
+        "slug": "2025-01-23-hello-world",
+        "title": "One week in and I'm going insane...",
+        "description": "Add your description here",
+        "date": "2025-01-23",
+        "chapter": "Introduction",
+        "chapterOrder": 1,
+        "thumbnail": "/images/IMG_1259.JPG"
+    },
+    {
+        "slug": "2025-01-23-hello-world",
+        "title": "Help is on the way, dear!",
+        "description": "Add your description here",
+        "date": "2025-01-23",
+        "chapter": "Introduction",
+        "chapterOrder": 1,
+        "thumbnail": "/images/IMG_1777.JPG"
+    },
+    {
+        "slug": "2025-01-23-hello-world",
+        "title": "Putting the 'hard' in hardware",
+        "description": "Add your description here",
+        "date": "2025-01-23",
+        "chapter": "Introduction",
+        "chapterOrder": 1,
+        "thumbnail": "/images/IMG_1823.JPG"
     },
     {
         "slug": "2025-01-22-why-i-built-this",
         "title": "Why I Built This Blog",
-        "date": "2025-01-22"
+        "description": "Add your description here",
+        "date": "2025-01-22",
+        "chapter": "Volumes 1-5",
+        "chapterOrder": 2,
+        "thumbnail": "/images/IMG_1837.JPG"
     }
 ]
