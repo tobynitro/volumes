@@ -14,8 +14,8 @@
     --font-heading: var(--font-body); /* Same as body, change if you want different */
     --font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
-    --font-size-base: 15px;           /* Base font size */
-    --font-size-small: 13px;          /* Small text */
+    --font-size-base: 14px;           /* Base font size */
+    --font-size-small: 12px;          /* Small text */
     --font-size-h1: 1.5rem;             /* Post titles */
     --font-size-h2: 1.25rem;           /* Section headings */
     --font-size-h3: 1rem;          /* Sub-section headings */
@@ -24,7 +24,7 @@
 
     /* -- LAYOUT -- */
     --content-width: 600px;           /* Max width of content */
-    --spacing-unit: 1.5rem;           /* Base spacing unit */
+    --spacing-unit: 1rem;           /* Base spacing unit */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -69,15 +69,9 @@ body {
 ============================================================ */
 .site-header {
     text-align: left;
-    margin-bottom: calc(var(--spacing-unit) * 2);
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
     padding-bottom: var(--spacing-unit);
     border-bottom: 1px solid var(--color-border);
-}
-
-.site-logo {
-    font-size: 3rem;
-    margin-bottom: 0.5rem;
-    /* If using an image logo, style it here */
 }
 
 .site-title {
@@ -95,7 +89,7 @@ body {
 
 .site-tagline {
     color: var(--color-text-muted);
-    font-size: var(--font-size-small);
+    font-size: var(--font-size-base);
     margin-top: 0.25rem;
 }
 
@@ -131,7 +125,7 @@ body {
 .post-title {
     font-family: var(--font-heading);
     font-size: var(--font-size-h1);
-    font-weight: 700;
+    font-weight: 500;
     margin-bottom: 0.5rem;
 }
 
