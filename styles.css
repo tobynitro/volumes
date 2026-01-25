@@ -14,11 +14,11 @@
     --font-heading: var(--font-body); /* Same as body, change if you want different */
     --font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
-    --font-size-base: 18px;           /* Base font size */
-    --font-size-small: 14px;          /* Small text */
-    --font-size-h1: 2rem;             /* Post titles */
-    --font-size-h2: 1.5rem;           /* Section headings */
-    --font-size-h3: 1.25rem;          /* Sub-section headings */
+    --font-size-base: 15px;           /* Base font size */
+    --font-size-small: 13px;          /* Small text */
+    --font-size-h1: 1.5rem;             /* Post titles */
+    --font-size-h2: 1.25rem;           /* Section headings */
+    --font-size-h3: 1rem;          /* Sub-section headings */
 
     --line-height: 1.7;               /* Line spacing for readability */
 
@@ -29,7 +29,7 @@
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --color-bg: #1a1a1a;
+        --color-bg: #171717;
         --color-text: #e0e0e0;
         --color-text-muted: #999999;
         --color-link: #6db3f2;
@@ -68,7 +68,7 @@ body {
    Edit the HTML below to change your logo/title
 ============================================================ */
 .site-header {
-    text-align: center;
+    text-align: left;
     margin-bottom: calc(var(--spacing-unit) * 2);
     padding-bottom: var(--spacing-unit);
     border-bottom: 1px solid var(--color-border);
