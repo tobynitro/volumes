@@ -1,7 +1,7 @@
 :root {
     /* -- COLORS -- */
-    --color-bg: #ffffff;              /* Page background */
-    --color-text: #1a1a1a;            /* Main text color */
+    --color-bg: #fafafa;              /* Page background */
+    --color-text: #171717;            /* Main text color */
     --color-text-muted: #666666;      /* Secondary text (dates, meta) */
     --color-link: #0066cc;            /* Link color */
     --color-link-hover: #004499;      /* Link hover color */
@@ -34,7 +34,7 @@
         --color-text-muted: #999999;
         --color-link: #6db3f2;
         --color-link-hover: #9ecbf7;
-        --color-border: #333333;
+        --color-border: #e1e1e1;
         --color-code-bg: #2d2d2d;
     }
 }
@@ -83,7 +83,7 @@ body {
 .site-title {
     font-family: var(--font-heading);
     font-size: var(--font-size-h1);
-    font-weight: 700;
+    font-weight: 500;
     color: var(--color-text);
     text-decoration: none;
     cursor: pointer;
