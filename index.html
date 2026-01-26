@@ -5,10 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Toby Nitro</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="alternate" type="application/rss+xml" title="Building Toby Nitro RSS Feed" href="/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="tokens-base.css">
+    <link rel="stylesheet" href="tokens-semantic.css">
+    <link rel="stylesheet" href="global.css">
+    <link rel="stylesheet" href="components/button.css">
+    <link rel="stylesheet" href="components/header.css">
+    <link rel="stylesheet" href="components/post-list.css">
+    <link rel="stylesheet" href="components/post.css">
+    <link rel="stylesheet" href="components/navigation.css">
+    <link rel="stylesheet" href="components/footer.css">
+    <link rel="stylesheet" href="components/utility.css">
 </head>
 <body>
     <div class="container">
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path class="sun-icon" d="M12 3V4M12 20V21M4 12H3M6.31412 6.31412L5.5 5.5M17.6859 6.31412L18.5 5.5M6.31412 17.69L5.5 18.5M17.6859 17.69L18.5 18.5M21 12H20M16 12C16 14.2091 14.2091 16 12 16C9.79086 16 8 14.2091 8 12C8 9.79086 9.79086 8 12 8C14.2091 8 16 9.79086 16 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path class="moon-icon" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
         <header class="home-header">
             <a href="/" class="site-title">Building Toby Nitro</a>
             <p class="site-tagline">Documenting the journey from software, to hardware.</p>
@@ -23,7 +42,7 @@
              FOOTER - EDIT THIS TO CUSTOMISE
         ============================================================ -->
         <footer class="site-footer">
-            <p>© 2025 Toby Nitro</p>
+            <p>© 2025 Toby Nitro · <a href="/feed.xml" class="rss-link">RSS Feed</a></p>
         </footer>
         
     </div>

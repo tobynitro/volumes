@@ -1,0 +1,112 @@
+:root {
+    /* Backgrounds */
+    --tb-bg-none: var(--neutral-none);
+    --tb-bg-night: var(--gray-light-1700);
+    --tb-bg-bridge: var(--gray-light-1600);
+    --tb-bg-helm: var(--gray-light-1500);
+    --tb-bg-rudder: var(--gray-light-1400);
+    --tb-bg-hold: var(--gray-light-200);
+    --tb-bg-muster: var(--alpha-black-300);
+    --tb-bg-lower-deck: var(--gray-light-100);
+    --tb-bg-main-deck: var(--neutral-white);
+    --tb-bg-upper-deck: var(--neutral-white);
+    --tb-bg-darken: var(--gray-light-1100);
+    --tb-bg-shroud: var(--alpha-white-800);
+    --tb-bg-drift: var(--alpha-black-400);
+    --tb-bg-buoy: var(--alpha-black-500);
+    --tb-bg-brand: var(--orange-200);
+    --tb-bg-special: var(--purple-200);
+    --tb-bg-success: var(--green-200);
+    --tb-bg-info: var(--blue-200);
+    --tb-bg-warning: var(--yellow-200);
+    --tb-bg-error: var(--red-200);
+
+    /* Foregrounds / Text */
+    --tb-fg-signal: var(--gray-light-100);
+    --tb-fg-on-bridge: var(--gray-light-200);
+    --tb-fg-hail: var(--neutral-white);
+    --tb-fg-command: var(--gray-light-1500);
+    --tb-fg-bellow: var(--gray-light-1600);
+    --tb-fg-pipe-up: var(--gray-light-1400);
+    --tb-fg-chew: var(--gray-light-1300);
+    --tb-fg-murmur: var(--gray-light-1200);
+    --tb-fg-pipe-down: var(--gray-light-1100);
+    --tb-fg-whisper: var(--gray-light-600);
+    --tb-fg-brand: var(--orange-500);
+    --tb-fg-special: var(--purple-600);
+    --tb-fg-success: var(--green-600);
+    --tb-fg-info: var(--blue-600);
+    --tb-fg-warning: var(--yellow-600);
+    --tb-fg-error: var(--red-500);
+
+    /* Borders */
+    --tb-border-none: var(--neutral-none);
+    --tb-border-bridge: var(--gray-light-1600);
+    --tb-border-helm: var(--gray-light-1500);
+    --tb-border-rudder: var(--gray-light-1400);
+    --tb-border-darken: var(--gray-light-1100);
+    --tb-border-batten: var(--gray-light-900);
+    --tb-border-waterline: var(--alpha-black-700);
+    --tb-border-rail: var(--alpha-black-600);
+    --tb-border-rope: var(--alpha-black-500);
+    --tb-border-seam: var(--alpha-black-400);
+    --tb-border-brand: var(--orange-500);
+    --tb-border-error: var(--red-500);
+}
+
+/* -- DARK MODE SEMANTIC TOKENS -- */
+:root[data-theme="dark"] {
+    /* Backgrounds */
+    --tb-bg-none: var(--neutral-none);
+    --tb-bg-night: var(--gray-dark-600);
+    --tb-bg-bridge: var(--gray-dark-1600);
+    --tb-bg-helm: var(--gray-dark-1500);
+    --tb-bg-rudder: var(--gray-dark-1700);
+    --tb-bg-drift: var(--alpha-white-500);
+    --tb-bg-hold: var(--neutral-black);
+    --tb-bg-lower-deck: var(--gray-dark-100);
+    --tb-bg-main-deck: var(--gray-dark-200);
+    --tb-bg-upper-deck: var(--gray-dark-400);
+    --tb-bg-darken: var(--gray-dark-1200);
+    --tb-bg-muster: var(--alpha-white-400);
+    --tb-bg-shroud: var(--alpha-black-800);
+    --tb-bg-buoy: var(--alpha-white-600);
+    --tb-bg-brand: var(--orange-200);
+    --tb-bg-special: var(--purple-100);
+    --tb-bg-info: var(--blue-100);
+    --tb-bg-success: var(--green-100);
+    --tb-bg-warning: var(--yellow-100);
+    --tb-bg-error: var(--red-200);
+
+    /* Foregrounds / Text */
+    --tb-fg-signal: var(--gray-dark-1700);
+    --tb-fg-on-bridge: var(--gray-dark-200);
+    --tb-fg-hail: var(--neutral-black);
+    --tb-fg-bellow: var(--gray-dark-1700);
+    --tb-fg-command: var(--gray-dark-1600);
+    --tb-fg-pipe-up: var(--gray-dark-1500);
+    --tb-fg-chew: var(--gray-dark-1400);
+    --tb-fg-murmur: var(--gray-dark-1300);
+    --tb-fg-pipe-down: var(--gray-dark-1200);
+    --tb-fg-whisper: var(--gray-dark-600);
+    --tb-fg-brand: var(--orange-400);
+    --tb-fg-special: var(--purple-400);
+    --tb-fg-success: var(--green-400);
+    --tb-fg-info: var(--blue-400);
+    --tb-fg-warning: var(--yellow-400);
+    --tb-fg-error: var(--red-400);
+
+    /* Borders */
+    --tb-border-none: var(--neutral-none);
+    --tb-border-bridge: var(--gray-dark-1500);
+    --tb-border-helm: var(--gray-dark-1600);
+    --tb-border-rudder: var(--gray-dark-1700);
+    --tb-border-darken: var(--gray-dark-1200);
+    --tb-border-batten: var(--gray-dark-1000);
+    --tb-border-waterline: var(--alpha-white-700);
+    --tb-border-rail: var(--alpha-white-600);
+    --tb-border-rope: var(--alpha-white-500);
+    --tb-border-seam: var(--alpha-white-400);
+    --tb-border-brand: var(--orange-400);
+    --tb-border-error: var(--red-400);
+}

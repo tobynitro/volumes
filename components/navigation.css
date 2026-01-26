@@ -1,0 +1,36 @@
+/* ============================================================
+   NAVIGATION COMPONENT
+   Post previous/next navigation links
+============================================================ */
+
+.post-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: calc(var(--spacing-unit) * 2);
+    padding-top: var(--spacing-unit);
+    border-top: 1px solid var(--color-border);
+    font-size: var(--font-size-small);
+}
+
+.post-nav a {
+    color: var(--color-link);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.post-nav a:hover {
+    text-decoration: underline;
+}
+
+.post-nav-prev::before {
+    content: '← ';
+}
+
+.post-nav-next::after {
+    content: ' →';
+}
+
+/* Empty placeholder to maintain layout */
+.post-nav-placeholder {
+    visibility: hidden;
+}

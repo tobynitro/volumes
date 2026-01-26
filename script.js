@@ -72,7 +72,8 @@
                 if (inBlockquote) { html += `<blockquote><p>${parseInline(blockquoteContent.join(' '))}</p></blockquote>`; inBlockquote = false; blockquoteContent = []; }
                 const level = line.match(/^(#+)/)[1].length;
                 const content = line.replace(/^#+\s*/, '');
-                html += `<h${level}>${parseInline(content)}</h${level}>\n`;
+                const headingId = generateSlug(content);
+                html += `<h${level} id="${headingId}"><a href="#${headingId}" class="heading-anchor">${parseInline(content)}</a></h${level}>\n`;
                 continue;
             }
 
@@ -158,6 +159,16 @@
         return html;
     }
 
+    // Generate URL-friendly slug from text
+    function generateSlug(text) {
+        return text
+            .toLowerCase()
+            .replace(/[^\w\s-]/g, '') // Remove special chars
+            .replace(/\s+/g, '-')      // Replace spaces with hyphens
+            .replace(/--+/g, '-')      // Replace multiple hyphens with single
+            .trim();
+    }
+
     // Parse inline elements (bold, italic, links, images)
     function parseInline(text) {
         // Images: ![alt](src)
@@ -201,50 +212,21 @@
             return '<p class="loading">No posts yet. Add your first post!</p>';
         }
 
-        // Group posts by chapter
-        const chapters = {};
-        posts.forEach(post => {
-            const chapter = post.chapter || 'Uncategorized';
-            if (!chapters[chapter]) {
-                chapters[chapter] = {
-                    posts: [],
-                    order: post.chapterOrder || 999 // Default to end if not specified
-                };
-            }
-            chapters[chapter].posts.push(post);
-        });
+        // Render simple list of posts
+        const items = posts.map(post => `
+            <div class="post-list-item">
+                <a href="#${post.slug}" class="post-list-link">${escapeHtml(post.title)}</a>
+            </div>
+        `).join('');
 
-        // Sort chapters by chapterOrder
-        const sortedChapters = Object.entries(chapters).sort((a, b) => a[1].order - b[1].order);
-
-        // Render each chapter with accordion
-        const chevronIcon = `<svg class="chapter-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 10L12 14L8 10" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"/></svg>`;
-
-        const chaptersHtml = sortedChapters.map(([chapterName, chapterData]) => {
-            const chapterPosts = chapterData.posts;
-            const items = chapterPosts.map(post => `
-                <li class="post-list-item">
-                    <a href="#${post.slug}" class="post-list-link">${escapeHtml(post.title)}</a>
-                </li>
-            `).join('');
-
-            return `
-                <div class="chapter expanded">
-                    <h2 class="chapter-heading" onclick="toggleChapter(this)">
-                        ${chapterData.order}. ${escapeHtml(chapterName)}
-                        <span class="chapter-meta">
-                            <span class="chapter-count">${chapterPosts.length}</span>
-                            ${chevronIcon}
-                        </span>
-                    </h2>
-                    <ol class="post-list chapter-content">
-                        ${items}
-                    </ol>
+        return `
+            <div class="post-list-container">
+                <h2 class="post-list-title">Recent posts</h2>
+                <div class="post-list">
+                    ${items}
                 </div>
-            `;
-        }).join('');
-
-        return chaptersHtml;
+            </div>
+        `;
     }
 
     // ============================================================
@@ -374,36 +356,102 @@
     }
 
     // ============================================================
-    // ACCORDION FUNCTIONALITY
+    // DARK MODE TOGGLE
     // ============================================================
-    window.toggleChapter = function(heading) {
-        const chapter = heading.parentElement;
-        const items = chapter.querySelectorAll('.post-list-item');
-        const isExpanding = !chapter.classList.contains('expanded');
-        const delayIncrement = 0.067; // ~67ms between each item (slowed by 1/3)
+    function initTheme() {
+        // Always set an explicit theme (either from localStorage or system preference)
+        const savedTheme = localStorage.getItem('theme');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
 
-        // Set staggered delays for each item
-        items.forEach((item, index) => {
-            if (isExpanding) {
-                // Expanding: top to bottom (0, 1, 2, 3...)
-                item.style.transitionDelay = `${index * delayIncrement}s`;
-            } else {
-                // Collapsing: bottom to top (reverse order)
-                item.style.transitionDelay = `${(items.length - 1 - index) * delayIncrement}s`;
-            }
-        });
+        document.documentElement.setAttribute('data-theme', theme);
 
-        // Toggle the expanded class
-        if (isExpanding) {
-            chapter.classList.add('expanded');
-        } else {
-            chapter.classList.remove('expanded');
+        // Set up toggle button
+        const toggleButton = document.getElementById('theme-toggle');
+        if (toggleButton) {
+            toggleButton.addEventListener('click', function() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+            });
         }
-    };
+    }
+
+    // ============================================================
+    // HEADING ANCHOR CLICKS
+    // Handle anchor link clicks to scroll within post without changing hash
+    // ============================================================
+    document.addEventListener('click', function(e) {
+        const anchor = e.target.closest('.heading-anchor');
+        if (!anchor) return;
+
+        // Only handle if we're on a post page
+        const slug = getRoute();
+        if (!slug) return;
+
+        e.preventDefault();
+        const href = anchor.getAttribute('href');
+        if (href && href.startsWith('#')) {
+            const targetId = href.substring(1);
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+    });
+
+    // ============================================================
+    // KEYBOARD NAVIGATION
+    // ============================================================
+    window.addEventListener('keydown', function(e) {
+        const slug = getRoute();
+
+        // Only handle keyboard navigation when viewing a post
+        if (!slug) return;
+
+        // Don't interfere with form inputs or textareas
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+        // Get current post and navigation
+        if (!postsData) return;
+        const postIndex = postsData.findIndex(p => p.slug === slug);
+        if (postIndex === -1) return;
+
+        switch(e.key) {
+            case 'ArrowLeft':
+                // Navigate to previous (older) post
+                const prevPost = postsData[postIndex + 1];
+                if (prevPost) {
+                    e.preventDefault();
+                    window.location.hash = prevPost.slug;
+                }
+                break;
+
+            case 'ArrowRight':
+                // Navigate to next (newer) post
+                const nextPost = postsData[postIndex - 1];
+                if (nextPost) {
+                    e.preventDefault();
+                    window.location.hash = nextPost.slug;
+                }
+                break;
+
+            case 'Escape':
+                // Return to home
+                e.preventDefault();
+                window.location.hash = '';
+                break;
+        }
+    });
 
     // ============================================================
     // INITIALISE
     // ============================================================
+
+    // Initialize theme
+    initTheme();
 
     // Re-render when URL hash changes
     window.addEventListener('hashchange', render);

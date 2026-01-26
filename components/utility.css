@@ -1,0 +1,16 @@
+/* ============================================================
+   UTILITY COMPONENT
+   Loading and error states
+============================================================ */
+
+.loading {
+    text-align: center;
+    color: var(--color-text-muted);
+    padding: calc(var(--spacing-unit) * 2);
+}
+
+.error {
+    text-align: center;
+    color: #cc0000;
+    padding: calc(var(--spacing-unit) * 2);
+}

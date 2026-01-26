@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Building Toby Nitro</title>
+    <link>https://yoursite.com</link>
+    <description>Documenting the journey from software, to hardware.</description>
+    <language>en</language>
+    <lastBuildDate>Mon, 26 Jan 2026 10:03:27 GMT</lastBuildDate>
+    <atom:link href="https://yoursite.com/feed.xml" rel="self" type="application/rss+xml"/>
+
+    <item>
+      <title>Understanding Electricity</title>
+      <link>https://yoursite.com/#2025-01-23-understanding-electricity</link>
+      <guid isPermaLink="true">https://yoursite.com/#2025-01-23-understanding-electricity</guid>
+      <pubDate>Thu, 23 Jan 2025 00:00:00 GMT</pubDate>
+      <description>Understanding Electricity
+
+Add your content here
+
+This is a placeholder for your blog post. Replace this content with your actual post about understanding electricity.
+
+Section Example
+
+Point one
+Poin...</description>
+      <category>Introduction</category>
+    </item>
+
+    <item>
+      <title>What does PCB actually stand for?</title>
+      <link>https://yoursite.com/#2025-01-23-pcb-explained</link>
+      <guid isPermaLink="true">https://yoursite.com/#2025-01-23-pcb-explained</guid>
+      <pubDate>Thu, 23 Jan 2025 00:00:00 GMT</pubDate>
+      <description>What does PCB actually stand for?
+
+Add your content here
+
+This is a placeholder for your blog post. Replace this content with your actual post about PCBs.
+
+Section Example
+
+Point one
+Point two
+Point t...</description>
+      <category>Introduction</category>
+    </item>
+
+    <item>
+      <title>One week in and I&apos;m going insane...</title>
+      <link>https://yoursite.com/#2025-01-23-week-one-struggles</link>
+      <guid isPermaLink="true">https://yoursite.com/#2025-01-23-week-one-struggles</guid>
+      <pubDate>Thu, 23 Jan 2025 00:00:00 GMT</pubDate>
+      <description>One week in and I&apos;m going insane...
+
+Add your content here
+
+This is a placeholder for your blog post. Replace this content with your actual post about your first week struggles.
+
+Section Example
+
+Poin...</description>
+      <category>Introduction</category>
+    </item>
+
+    <item>
+      <title>Help is on the way, dear!</title>
+      <link>https://yoursite.com/#2025-01-23-help-on-the-way</link>
+      <guid isPermaLink="true">https://yoursite.com/#2025-01-23-help-on-the-way</guid>
+      <pubDate>Thu, 23 Jan 2025 00:00:00 GMT</pubDate>
+      <description>Help is on the way, dear!
+
+Add your content here
+
+This is a placeholder for your blog post. Replace this content with your actual post about help arriving.
+
+Section Example
+
+Point one
+Point two
+Point ...</description>
+      <category>Introduction</category>
+    </item>
+
+    <item>
+      <title>Putting the &apos;hard&apos; in hardware</title>
+      <link>https://yoursite.com/#2025-01-23-hard-in-hardware</link>
+      <guid isPermaLink="true">https://yoursite.com/#2025-01-23-hard-in-hardware</guid>
+      <pubDate>Thu, 23 Jan 2025 00:00:00 GMT</pubDate>
+      <description>Putting the &apos;hard&apos; in hardware
+
+Add your content here
+
+This is a placeholder for your blog post. Replace this content with your actual post about hardware challenges.
+
+Section Example
+
+Point one
+Point...</description>
+      <category>Introduction</category>
+    </item>
+
+    <item>
+      <title>Why I Built This Blog</title>
+      <link>https://yoursite.com/#2025-01-22-why-i-built-this</link>
+      <guid isPermaLink="true">https://yoursite.com/#2025-01-22-why-i-built-this</guid>
+      <pubDate>Wed, 22 Jan 2025 00:00:00 GMT</pubDate>
+      <description>Why I Built This Blog
+
+I&apos;ve tried every blogging platform. WordPress felt like overkill. Medium took ownership of my words. Ghost was nice but still more than I needed.
+
+All I wanted was to write a da...</description>
+      <category>Volumes 1-5</category>
+    </item>
+  </channel>
+</rss>
