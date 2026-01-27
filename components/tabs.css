@@ -1,0 +1,56 @@
+/* ============================================================
+   TABS COMPONENT
+   Navigation tabs for homepage content filtering
+============================================================ */
+
+.tabs-container {
+    margin-top: calc(var(--spacing-unit) * 1.5);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.tabs {
+    display: flex;
+    gap: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.tab-item {
+    flex: 0 0 auto;
+}
+
+.tab-link {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    cursor: pointer;
+    font-size: var(--font-size-base);
+    font-weight: 400;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease;
+    position: relative;
+    bottom: -1px; /* Align with container border */
+}
+
+.tab-link:hover {
+    color: var(--color-text);
+}
+
+.tab-link.active {
+    color: var(--color-text);
+    border-bottom-color: var(--color-link-hover);
+}
+
+/* Responsive: Stack tabs on very small screens if needed */
+@media (max-width: 400px) {
+    .tabs {
+        flex-wrap: wrap;
+    }
+
+    .tab-link {
+        padding: 0.5rem 0.75rem;
+        font-size: var(--font-size-small);
+    }
+}

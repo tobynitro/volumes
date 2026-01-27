@@ -1,115 +1,246 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0"
+     xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:content="http://purl.org/rss/1.0/modules/content/"
+     xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
     <title>Building Toby Nitro</title>
-    <link>https://yoursite.com</link>
-    <description>Documenting the journey from software, to hardware.</description>
-    <language>en</language>
-    <lastBuildDate>Mon, 26 Jan 2026 10:03:27 GMT</lastBuildDate>
-    <atom:link href="https://yoursite.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <link>https://tobynitro.com</link>
+    <description>Documenting the journey from software to hardware. Weekly EE tutorials, circuit design insights, and embedded systems development.</description>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 27 Jan 2026 09:54:14 GMT</lastBuildDate>
+    <atom:link href="https://tobynitro.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <managingEditor>noreply@tobynitro.com (Toby Nitro)</managingEditor>
+    <webMaster>noreply@tobynitro.com (Toby Nitro)</webMaster>
+    <category>Electrical Engineering</category>
+    <category>Hardware Design</category>
+    <category>Embedded Systems</category>
+    <category>Electronics</category>
+    <image>
+      <url>https://tobynitro.com/og-image.jpg</url>
+      <title>Building Toby Nitro</title>
+      <link>https://tobynitro.com</link>
+    </image>
+
+    <item>
+      <title>Hello World</title>
+      <link>https://tobynitro.com/#2025-01-23-hello-world</link>
+      <guid isPermaLink="true">https://tobynitro.com/#2025-01-23-hello-world</guid>
+      <pubDate>Thu, 23 Jan 2025 00:00:00 GMT</pubDate>
+      <dc:creator>Toby Nitro</dc:creator>
+      <description><![CDATA[My first post on this new lightweight blog. Zero dependencies, full control, simple workflow.]]></description>
+      <content:encoded><![CDATA[
+<h1>Hello World</h1>
+<br/>
+<p>This is my first post on my new blog. It&apos;s incredibly lightweight — just a single HTML file, a JSON manifest, and markdown files in a folder.</p>
+<br/>
+<h2>Why This Setup?</h2>
+<br/>
+<p>I wanted something:</p>
+<br/>
+<p>- **Zero dependencies** — no npm, no build step, no framework</p>
+<p>- **Full control** — I can edit every line of CSS</p>
+<p>- **Simple workflow** — write markdown, push, done</p>
+<br/>
+<h2>What I Can Write</h2>
+<br/>
+<p>The markdown parser handles all the basics:</p>
+<br/>
+<p>- **Bold text** and *italic text*</p>
+<p>- [Links to things](https://example.com)</p>
+<p>- Lists (like this one)</p>
+<p>- Code blocks</p>
+<p>- Blockquotes</p>
+<p>- Images</p>
+<br/>
+<p>Here&apos;s some code:</p>
+<br/>
+<p>```javascript</p>
+<p>const greeting = &quot;Hello, world!&quot;;</p>
+<p>console.log(greeting);</p>
+<p>```</p>
+<br/>
+<p>And a blockquote:</p>
+<br/>
+<p>&gt; The best blog is the one you actually write in.</p>
+<br/>
+<p>---</p>
+<br/>
+<p>That&apos;s it. Simple, fast, mine.</p>
+<br/>
+      ]]></content:encoded>
+      <category>General</category>
+    </item>
 
     <item>
       <title>Understanding Electricity</title>
-      <link>https://yoursite.com/#2025-01-23-understanding-electricity</link>
-      <guid isPermaLink="true">https://yoursite.com/#2025-01-23-understanding-electricity</guid>
+      <link>https://tobynitro.com/#2025-01-23-understanding-electricity</link>
+      <guid isPermaLink="true">https://tobynitro.com/#2025-01-23-understanding-electricity</guid>
       <pubDate>Thu, 23 Jan 2025 00:00:00 GMT</pubDate>
-      <description>Understanding Electricity
-
-Add your content here
-
-This is a placeholder for your blog post. Replace this content with your actual post about understanding electricity.
-
-Section Example
-
-Point one
-Poin...</description>
-      <category>Introduction</category>
+      <dc:creator>Toby Nitro</dc:creator>
+      <description><![CDATA[Add your description here]]></description>
+      <content:encoded><![CDATA[
+<h1>Understanding Electricity</h1>
+<br/>
+<p>*Add your content here*</p>
+<br/>
+<p>This is a placeholder for your blog post. Replace this content with your actual post about understanding electricity.</p>
+<br/>
+<h2>Section Example</h2>
+<br/>
+<p>- Point one</p>
+<p>- Point two</p>
+<p>- Point three</p>
+<br/>
+      ]]></content:encoded>
+      <category>General</category>
     </item>
 
     <item>
       <title>What does PCB actually stand for?</title>
-      <link>https://yoursite.com/#2025-01-23-pcb-explained</link>
-      <guid isPermaLink="true">https://yoursite.com/#2025-01-23-pcb-explained</guid>
+      <link>https://tobynitro.com/#2025-01-23-pcb-explained</link>
+      <guid isPermaLink="true">https://tobynitro.com/#2025-01-23-pcb-explained</guid>
       <pubDate>Thu, 23 Jan 2025 00:00:00 GMT</pubDate>
-      <description>What does PCB actually stand for?
-
-Add your content here
-
-This is a placeholder for your blog post. Replace this content with your actual post about PCBs.
-
-Section Example
-
-Point one
-Point two
-Point t...</description>
-      <category>Introduction</category>
+      <dc:creator>Toby Nitro</dc:creator>
+      <description><![CDATA[Add your description here]]></description>
+      <content:encoded><![CDATA[
+<h1>What does PCB actually stand for?</h1>
+<br/>
+<p>*Add your content here*</p>
+<br/>
+<p>This is a placeholder for your blog post. Replace this content with your actual post about PCBs.</p>
+<br/>
+<h2>Section Example</h2>
+<br/>
+<p>- Point one</p>
+<p>- Point two</p>
+<p>- Point three</p>
+<br/>
+      ]]></content:encoded>
+      <category>General</category>
     </item>
 
     <item>
       <title>One week in and I&apos;m going insane...</title>
-      <link>https://yoursite.com/#2025-01-23-week-one-struggles</link>
-      <guid isPermaLink="true">https://yoursite.com/#2025-01-23-week-one-struggles</guid>
+      <link>https://tobynitro.com/#2025-01-23-week-one-struggles</link>
+      <guid isPermaLink="true">https://tobynitro.com/#2025-01-23-week-one-struggles</guid>
       <pubDate>Thu, 23 Jan 2025 00:00:00 GMT</pubDate>
-      <description>One week in and I&apos;m going insane...
-
-Add your content here
-
-This is a placeholder for your blog post. Replace this content with your actual post about your first week struggles.
-
-Section Example
-
-Poin...</description>
-      <category>Introduction</category>
+      <dc:creator>Toby Nitro</dc:creator>
+      <description><![CDATA[Add your description here]]></description>
+      <content:encoded><![CDATA[
+<h1>One week in and I&apos;m going insane...</h1>
+<br/>
+<p>*Add your content here*</p>
+<br/>
+<p>This is a placeholder for your blog post. Replace this content with your actual post about your first week struggles.</p>
+<br/>
+<h2>Section Example</h2>
+<br/>
+<p>- Point one</p>
+<p>- Point two</p>
+<p>- Point three</p>
+<br/>
+      ]]></content:encoded>
+      <category>General</category>
     </item>
 
     <item>
       <title>Help is on the way, dear!</title>
-      <link>https://yoursite.com/#2025-01-23-help-on-the-way</link>
-      <guid isPermaLink="true">https://yoursite.com/#2025-01-23-help-on-the-way</guid>
+      <link>https://tobynitro.com/#2025-01-23-help-on-the-way</link>
+      <guid isPermaLink="true">https://tobynitro.com/#2025-01-23-help-on-the-way</guid>
       <pubDate>Thu, 23 Jan 2025 00:00:00 GMT</pubDate>
-      <description>Help is on the way, dear!
-
-Add your content here
-
-This is a placeholder for your blog post. Replace this content with your actual post about help arriving.
-
-Section Example
-
-Point one
-Point two
-Point ...</description>
-      <category>Introduction</category>
+      <dc:creator>Toby Nitro</dc:creator>
+      <description><![CDATA[Add your description here]]></description>
+      <content:encoded><![CDATA[
+<h1>Help is on the way, dear!</h1>
+<br/>
+<p>*Add your content here*</p>
+<br/>
+<p>This is a placeholder for your blog post. Replace this content with your actual post about help arriving.</p>
+<br/>
+<h2>Section Example</h2>
+<br/>
+<p>- Point one</p>
+<p>- Point two</p>
+<p>- Point three</p>
+<br/>
+      ]]></content:encoded>
+      <category>General</category>
     </item>
 
     <item>
       <title>Putting the &apos;hard&apos; in hardware</title>
-      <link>https://yoursite.com/#2025-01-23-hard-in-hardware</link>
-      <guid isPermaLink="true">https://yoursite.com/#2025-01-23-hard-in-hardware</guid>
+      <link>https://tobynitro.com/#2025-01-23-hard-in-hardware</link>
+      <guid isPermaLink="true">https://tobynitro.com/#2025-01-23-hard-in-hardware</guid>
       <pubDate>Thu, 23 Jan 2025 00:00:00 GMT</pubDate>
-      <description>Putting the &apos;hard&apos; in hardware
-
-Add your content here
-
-This is a placeholder for your blog post. Replace this content with your actual post about hardware challenges.
-
-Section Example
-
-Point one
-Point...</description>
-      <category>Introduction</category>
+      <dc:creator>Toby Nitro</dc:creator>
+      <description><![CDATA[Add your description here]]></description>
+      <content:encoded><![CDATA[
+<h1>Putting the &apos;hard&apos; in hardware</h1>
+<br/>
+<p>*Add your content here*</p>
+<br/>
+<p>This is a placeholder for your blog post. Replace this content with your actual post about hardware challenges.</p>
+<br/>
+<h2>Section Example</h2>
+<br/>
+<p>- Point one</p>
+<p>- Point two</p>
+<p>- Point three</p>
+<br/>
+      ]]></content:encoded>
+      <category>General</category>
     </item>
 
     <item>
       <title>Why I Built This Blog</title>
-      <link>https://yoursite.com/#2025-01-22-why-i-built-this</link>
-      <guid isPermaLink="true">https://yoursite.com/#2025-01-22-why-i-built-this</guid>
+      <link>https://tobynitro.com/#2025-01-22-why-i-built-this</link>
+      <guid isPermaLink="true">https://tobynitro.com/#2025-01-22-why-i-built-this</guid>
       <pubDate>Wed, 22 Jan 2025 00:00:00 GMT</pubDate>
-      <description>Why I Built This Blog
-
-I&apos;ve tried every blogging platform. WordPress felt like overkill. Medium took ownership of my words. Ghost was nice but still more than I needed.
-
-All I wanted was to write a da...</description>
-      <category>Volumes 1-5</category>
+      <dc:creator>Toby Nitro</dc:creator>
+      <description><![CDATA[Add your description here]]></description>
+      <content:encoded><![CDATA[
+<h1>Why I Built This Blog</h1>
+<br/>
+<p>I&apos;ve tried every blogging platform. WordPress felt like overkill. Medium took ownership of my words. Ghost was nice but still more than I needed.</p>
+<br/>
+<p>All I wanted was to write a daily post.</p>
+<br/>
+<h2>The Requirements</h2>
+<br/>
+<p>1. Write in markdown (not some proprietary editor)</p>
+<p>2. Full control over the design</p>
+<p>3. No database</p>
+<p>4. No build step</p>
+<p>5. Host it myself</p>
+<br/>
+<h2>The Solution</h2>
+<br/>
+<p>A single `index.html` file that:</p>
+<br/>
+<p>- Reads a list of posts from `posts.json`</p>
+<p>- Fetches markdown files from a `/posts` folder  </p>
+<p>- Parses and renders them in the browser</p>
+<br/>
+<p>That&apos;s the entire &quot;engine&quot;. About 300 lines of commented code.</p>
+<br/>
+<h2>The Workflow</h2>
+<br/>
+<p>```</p>
+<p>1. Write a .md file</p>
+<p>2. Add one line to posts.json</p>
+<p>3. git push</p>
+<p>```</p>
+<br/>
+<p>Netlify picks up the changes automatically. The site rebuilds in seconds.</p>
+<br/>
+<p>No webpack. No npm install. No waiting.</p>
+<br/>
+<p>Just words on a page, the way it should be.</p>
+<br/>
+      ]]></content:encoded>
+      <category>General</category>
     </item>
+
   </channel>
 </rss>

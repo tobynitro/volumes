@@ -1,0 +1,52 @@
+# Robots.txt for Building Toby Nitro
+# Allow all bots to crawl everything
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://tobynitro.com/sitemap.xml
+
+# Allow AI crawlers for training and indexing
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# OpenAI GPT crawler
+User-agent: GPTBot
+Allow: /
+
+# Anthropic Claude crawler
+User-agent: ClaudeBot
+Allow: /
+
+# Google Extended (for Bard/Gemini)
+User-agent: Google-Extended
+Allow: /
+
+# Common AI crawlers
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+# Explicitly disallow nothing
+Disallow:
+
+# Crawl-delay (optional - remove if you have fast servers)
+# Crawl-delay: 1

@@ -7,6 +7,14 @@
 .blog-header {
     text-align: left;
     margin-bottom: calc(var(--spacing-unit) * 1.5);
+}
+
+.home-header {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.blog-header {
     padding-bottom: var(--spacing-unit);
     border-bottom: 1px solid var(--color-border);
 }

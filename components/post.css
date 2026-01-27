@@ -15,6 +15,10 @@
 }
 
 /* Markdown Content Styles */
+.post-content {
+    padding-inline: var(--content-padding-inline);
+}
+
 .post-content h1 {
     font-size: var(--font-size-h1);
     margin: 1.5rem 0 1rem;
@@ -93,6 +97,9 @@
     border-radius: 4px;
     overflow-x: auto;
     margin-bottom: var(--spacing-unit);
+    /* Break out of content padding for full-width */
+    margin-inline: calc(-1 * var(--content-padding-inline));
+    padding-inline: calc(var(--spacing-unit) + var(--content-padding-inline));
 }
 
 .post-content pre code {
@@ -110,4 +117,7 @@
     max-width: 100%;
     height: auto;
     border-radius: 4px;
+    /* Break out of content padding for full-width */
+    margin-inline: calc(-1 * var(--content-padding-inline));
+    width: calc(100% + 2 * var(--content-padding-inline));
 }

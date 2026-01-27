@@ -1,264 +1,235 @@
-# Toby Nitro's Blog
+# Building Toby Nitro
 
-A zero-dependency, self-hosted blog engine in a single HTML file.
+A lightweight, SEO-optimized blog engine for electrical engineering content. Features tabbed navigation, troubleshooting guides, and automatic SEO generation.
+
+## Features
+
+- **Zero build dependencies** - Just write markdown and push
+- **Tab navigation** - Recent Posts, Troubleshooting Guides, About
+- **SEO optimized** - Automatic sitemap, RSS feed, structured data
+- **Guide system** - Rich card UI for troubleshooting content
+- **Dark mode** - Automatic theme switching
+- **Fast & lightweight** - No frameworks, no databases
 
 ## Quick Start
 
+See [QUICK-START.md](QUICK-START.md) for the 3-minute publishing workflow.
+
+## File Structure
+
 ```
-your-blog/
-├── index.html      ← The entire engine (edit CSS here)
-├── posts.json      ← List of your posts
-├── posts/          ← Your markdown files
+tobynitro/
+├── index.html              # Main HTML file
+├── script.js               # Blog engine (routing, markdown parsing, rendering)
+├── posts.json              # Post manifest
+├── posts/                  # Your markdown files
 │   ├── 2025-01-23-hello-world.md
-│   └── 2025-01-22-why-i-built-this.md
-└── README.md       ← You're reading it
+│   └── ...
+├── components/             # Component CSS files
+│   ├── button.css          # Back button, theme toggle
+│   ├── footer.css          # Footer styles
+│   ├── guide-card.css      # Troubleshooting guide cards
+│   ├── header.css          # Site header and blog header
+│   ├── navigation.css      # Post prev/next navigation
+│   ├── post-list.css       # Post list styles
+│   ├── post.css            # Individual post styles
+│   ├── tabs.css            # Tab navigation
+│   └── utility.css         # Loading and error states
+├── tokens-base.css         # Base design tokens
+├── tokens-semantic.css     # Semantic color tokens
+├── global.css              # Global styles and layout
+├── generate-seo.js         # Generate sitemap.xml and feed.xml
+├── validate-posts.js       # Validate posts.json integrity
+├── sitemap.xml             # Auto-generated sitemap
+├── feed.xml                # Auto-generated RSS feed
+├── robots.txt              # Search engine crawler rules
+└── images/                 # Your images
+
+Documentation:
+├── README.md               # This file
+├── QUICK-START.md          # Publishing workflow
+├── SEO-GUIDE.md            # SEO best practices
+├── TROUBLESHOOTING-GUIDE.md # Writing troubleshooting guides
+└── DOMAIN-SETUP.md         # Domain configuration
 ```
 
----
-
-## How to Write a Post
-
-### 1. Create a markdown file
-
-Create a new `.md` file in the `/posts` folder.
-
-**Naming convention:** `YYYY-MM-DD-slug-name.md`
-
-Example: `posts/2025-01-24-my-new-post.md`
-
-```markdown
-# My New Post
-
-Write your content here using markdown.
-
-## Subheadings work
-
-So do **bold**, *italic*, and [links](https://example.com).
-
-- Lists
-- Work
-- Too
-
-And code blocks:
-
-```javascript
-const x = 1;
-```
-
-> Blockquotes as well.
-```
-
-### 2. Add to posts.json
-
-Open `posts.json` and add your post to the **top** of the array:
-
-```json
-[
-    {
-        "slug": "2025-01-24-my-new-post",
-        "title": "My New Post",
-        "date": "2025-01-24"
-    },
-    {
-        "slug": "2025-01-23-hello-world",
-        "title": "Hello World",
-        "date": "2025-01-23"
-    }
-]
-```
-
-**Important:**
-- `slug` must match the filename (without `.md`)
-- `date` is in `YYYY-MM-DD` format
-- Newest posts go at the top (or anywhere — it auto-sorts by date)
-
-### 3. Push to deploy
+## Publishing a New Post
 
 ```bash
+# 1. Create markdown file
+echo "# My New Post" > posts/2025-01-27-my-post.md
+
+# 2. Add to posts.json
+# Add entry with: slug, title, description, date, thumbnail, type
+
+# 3. Validate (optional)
+node validate-posts.js
+
+# 4. Generate SEO files
+node generate-seo.js
+
+# 5. Test locally
+python -m http.server 8000
+
+# 6. Deploy
 git add .
-git commit -m "New post: My New Post"
+git commit -m "Add post: My New Post"
 git push
 ```
 
-That's it. Netlify will automatically deploy.
+## Content Types
 
----
+### Regular Posts (`type: "post"`)
 
-## How to Deploy to Netlify
+Simple blog posts shown in a list format.
 
-### First-time setup
-
-1. **Create a GitHub repo**
-   ```bash
-   cd your-blog
-   git init
-   git add .
-   git commit -m "Initial commit"
-   ```
-
-2. **Push to GitHub**
-   - Create a new repo on github.com
-   - Follow their instructions to push your local repo
-
-3. **Connect to Netlify**
-   - Go to [netlify.com](https://netlify.com) and sign up/log in
-   - Click "Add new site" → "Import an existing project"
-   - Connect your GitHub account
-   - Select your blog repo
-   - Deploy settings:
-     - Build command: (leave empty)
-     - Publish directory: (leave empty or `.`)
-   - Click "Deploy"
-
-4. **Set up your custom domain**
-   - In Netlify: Site settings → Domain management → Add custom domain
-   - Add `tobynitro.com`
-   - Follow Netlify's instructions to update your DNS
-
-### After setup
-
-Every time you `git push`, Netlify automatically deploys your changes. Usually takes 5-10 seconds.
-
----
-
-## How to Customise
-
-### Change colors and fonts
-
-Open `index.html` and find the `:root` CSS variables near the top:
-
-```css
-:root {
-    --color-bg: #ffffff;           /* Page background */
-    --color-text: #1a1a1a;         /* Main text */
-    --color-link: #0066cc;         /* Links */
-    --content-width: 600px;        /* Content width */
-    /* ... more variables ... */
+```json
+{
+    "slug": "2025-01-27-topic",
+    "title": "Your Title Here",
+    "description": "SEO description",
+    "date": "2025-01-27",
+    "thumbnail": "/images/image.jpg",
+    "type": "post"
 }
 ```
 
-Change these values to restyle the entire site.
+### Troubleshooting Guides (`type: "guide"`)
 
-### Change the header/logo
+Rich cards with problem statements, difficulty badges, and tags.
 
-Find this section in the HTML:
-
-```html
-<header class="site-header">
-    <div class="site-logo">⚡</div>
-    <a href="/" class="site-title">Toby Nitro</a>
-    <p class="site-tagline">Daily thoughts and experiments</p>
-</header>
-```
-
-Options:
-- Change the emoji: Replace `⚡` with any emoji
-- Use an image: Replace with `<img src="/logo.png" alt="Logo" class="site-logo">`
-- Text only: Delete the `site-logo` div entirely
-
-### Enable dark mode
-
-Find this commented block in the CSS and uncomment it:
-
-```css
-@media (prefers-color-scheme: dark) {
-    :root {
-        --color-bg: #1a1a1a;
-        --color-text: #e0e0e0;
-        /* ... */
-    }
+```json
+{
+    "slug": "2025-01-27-fixing-issue",
+    "title": "Fixing Common Issue",
+    "description": "SEO description",
+    "date": "2025-01-27",
+    "thumbnail": "/images/image.jpg",
+    "type": "guide",
+    "problem": "Brief description of what this guide solves",
+    "difficulty": "Beginner",
+    "tags": ["LED", "Circuit", "Debugging"]
 }
 ```
 
-This automatically switches to dark mode based on the user's system preference.
+See [TROUBLESHOOTING-GUIDE.md](TROUBLESHOOTING-GUIDE.md) for detailed guide writing instructions.
 
-### Change the favicon
+## Customization
 
-Find this line in the `<head>`:
+### Change Domain
 
-```html
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+1. Update `CONFIG.siteUrl` in `generate-seo.js`
+2. Update all URLs in `index.html` meta tags
+3. Run `node generate-seo.js` to regenerate files
+
+See [DOMAIN-SETUP.md](DOMAIN-SETUP.md) for complete instructions.
+
+### Change Colors
+
+Edit CSS custom properties in `tokens-base.css` and `tokens-semantic.css`.
+
+### Change Site Title
+
+1. Update `<title>` in `index.html`
+2. Update site title in `generate-seo.js`
+3. Update header in `script.js` (search for "Building Toby Nitro")
+
+## Development
+
+### Debug Mode
+
+Set `CONFIG.debug = true` in `script.js` for verbose logging and post validation.
+
+### Local Server
+
+```bash
+# Python
+python -m http.server 8000
+
+# Node.js
+npx serve
+
+# Open http://localhost:8000
 ```
 
-Options:
-- Change the emoji in the SVG
-- Use a file: `<link rel="icon" href="/favicon.ico">`
+### Validation
 
----
-
-## Markdown Cheatsheet
-
-| What you write | What you get |
-|----------------|--------------|
-| `# Heading 1` | Big heading |
-| `## Heading 2` | Medium heading |
-| `**bold**` | **bold** |
-| `*italic*` | *italic* |
-| `[link](url)` | Clickable link |
-| `![alt](image.jpg)` | Image |
-| `` `code` `` | Inline code |
-| ` ``` code block ``` ` | Code block |
-| `> quote` | Blockquote |
-| `- item` | Bullet list |
-| `1. item` | Numbered list |
-| `---` | Horizontal line |
-
----
-
-## File Structure Explained
-
-```
-index.html
-├── <head>
-│   └── All CSS (easily editable variables at top)
-│
-├── <body>
-│   ├── Header (logo, title, tagline)
-│   ├── Main content area (populated by JS)
-│   └── Footer
-│
-└── <script>
-    ├── Markdown parser (tiny, handles common syntax)
-    ├── Router (reads URL hash to show right content)
-    └── Renderer (turns posts into HTML)
-
-posts.json
-└── Array of {slug, title, date} objects
-
-posts/
-└── Your .md files (one per post)
+```bash
+node validate-posts.js
 ```
 
----
+Checks for:
+- Valid JSON syntax
+- Required fields
+- Missing markdown files
+- Guide-specific field requirements
+- SEO issues
 
-## Troubleshooting
+## Deployment
 
-**Post not showing up?**
-- Check the slug in `posts.json` matches the filename exactly
-- Make sure the date format is `YYYY-MM-DD`
-- Check for JSON syntax errors (trailing commas, missing quotes)
+### GitHub Pages
 
-**Styles not updating?**
-- Hard refresh: Cmd+Shift+R (Mac) or Ctrl+Shift+R (Windows)
-- Check browser dev tools for CSS errors
+1. Push to GitHub
+2. Settings → Pages → Deploy from branch `main`
+3. Configure custom domain (optional)
 
-**Site not deploying?**
-- Check Netlify deploy logs for errors
-- Make sure your GitHub repo is connected
+### Netlify
 
----
+1. Connect GitHub repo
+2. Build command: (leave empty)
+3. Publish directory: `.`
+4. Auto-deploys on every push
 
-## Why No Build Step?
+### Other Hosts
 
-Modern browsers can do a lot. This blog:
-- Parses markdown in the browser (< 100 lines of JS)
-- Uses CSS variables for theming (no Sass needed)
-- Routes via URL hash (no server needed)
+Any static hosting works:
+- Vercel
+- Cloudflare Pages
+- AWS S3 + CloudFront
+- Your own server (just serve the files)
 
-The result: a blog you fully understand and control, with zero dependencies that could break, update, or disappear.
+## Architecture
 
----
+### CSS Token System
+
+Three-tier architecture:
+1. **Base tokens** (`tokens-base.css`) - Raw values (colors, spacing)
+2. **Semantic tokens** (`tokens-semantic.css`) - Contextual names (--color-text, --color-link)
+3. **Component tokens** - Component-specific styles
+
+Automatic dark mode via `data-theme` attribute.
+
+### JavaScript Engine
+
+- **Zero dependencies** - Custom markdown parser (~100 lines)
+- **Hash-based routing** - URLs like `#post-slug`
+- **Client-side rendering** - Fetches markdown, parses, displays
+- **Tab system** - localStorage persistence for active tab
+
+### SEO Strategy
+
+- Dynamic meta tags per page
+- Open Graph and Twitter Cards
+- JSON-LD structured data
+- Automatic sitemap generation
+- Enhanced RSS feed with full content
+- AI crawler allowlisting (GPTBot, ClaudeBot)
+
+See [SEO-GUIDE.md](SEO-GUIDE.md) for optimization details.
+
+## Browser Support
+
+- Modern browsers (Chrome, Firefox, Safari, Edge)
+- Requires JavaScript enabled
+- Uses ES6+ features (const, arrow functions, async/await)
 
 ## License
 
-Do whatever you want with this. It's just HTML.
+Do whatever you want with this code.
+
+## Documentation
+
+- [QUICK-START.md](QUICK-START.md) - Fast publishing workflow
+- [SEO-GUIDE.md](SEO-GUIDE.md) - SEO best practices and measurement
+- [TROUBLESHOOTING-GUIDE.md](TROUBLESHOOTING-GUIDE.md) - Writing effective guides
+- [DOMAIN-SETUP.md](DOMAIN-SETUP.md) - Changing your domain name

@@ -31,6 +31,7 @@
     /* Layout */
     --content-width: 560px;
     --spacing-unit: 1rem;
+    --content-padding-inline: 1rem; /* Aligns content with tab text */
 }
 
 /* ============================================================
