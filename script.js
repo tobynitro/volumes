@@ -178,11 +178,8 @@
             .trim();
     }
 
-    // Parse inline elements (bold, italic, links, images)
+    // Parse inline elements (bold, italic, links)
     function parseInline(text) {
-        // Images: ![alt](src)
-        text = text.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1">');
-
         // Links: [text](url)
         text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
 
@@ -533,13 +530,8 @@
             </nav>
         `;
 
-        const heroImage = post.thumbnail
-            ? `<img src="${escapeHtml(post.thumbnail)}" alt="${escapeHtml(post.title)}" class="post-hero">`
-            : '';
-
         return `
             <article>
-                ${heroImage}
                 <div class="post-content">
                     ${parseMarkdown(content)}
                 </div>
