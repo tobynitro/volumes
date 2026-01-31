@@ -20,16 +20,11 @@
     const CONFIG = {
         postsFile: 'posts.json',      // Where the post manifest lives
         postsDir: 'posts/',           // Where .md files live
-        docsFile: 'docs.json',        // Where the docs manifest lives
-        docsDir: 'docs/',             // Where doc .md files live
         debug: false                  // Set to true for verbose logging
     };
 
     // Store for loaded posts data
     let postsData = null;
-
-    // Store for loaded docs data
-    let docsData = null;
 
     // Simple logger that respects debug flag
     const log = {
@@ -333,7 +328,6 @@
         const tabs = [
             { id: 'recent', label: 'Recent Posts' },
             { id: 'troubleshooting', label: 'Troubleshooting' },
-            { id: 'design-system', label: 'Design System' },
             { id: 'about', label: 'About' }
         ];
 
@@ -353,7 +347,6 @@
 
     function initTabSwitching() {
         document.addEventListener('click', function(e) {
-            // Only handle homepage tabs (with data-tab), not doc tabs (with data-doc-tab)
             const tabLink = e.target.closest('.tab-link[data-tab]');
             if (!tabLink) return;
 
@@ -481,33 +474,6 @@
     }
 
     // ============================================================
-    // RENDER DESIGN SYSTEM
-    // ============================================================
-    function renderDesignSystem(docs) {
-        if (!docs || docs.length === 0) {
-            return `
-                <div class="post-list-container">
-                    <p class="loading">No components documented yet. Check back soon!</p>
-                </div>
-            `;
-        }
-
-        const items = docs.map(doc => `
-            <div class="post-list-item">
-                <a href="#docs/${doc.slug}" class="post-list-link">${escapeHtml(doc.title)}</a>
-            </div>
-        `).join('');
-
-        return `
-            <div class="post-list-container">
-                <div class="post-list">
-                    ${items}
-                </div>
-            </div>
-        `;
-    }
-
-    // ============================================================
     // RENDER ABOUT SECTION
     // ============================================================
     function renderAbout() {
@@ -575,143 +541,6 @@
     }
 
     // ============================================================
-    // DOCUMENTATION PAGE RENDERING
-    // ============================================================
-
-    // Parse documentation markdown into sections by ## headings
-    function parseDocSections(content) {
-        const sections = [];
-        const lines = content.split('\n');
-        let currentSection = null;
-        let currentContent = [];
-
-        for (const line of lines) {
-            const headingMatch = line.match(/^##\s+(.+)$/);
-            if (headingMatch) {
-                // Save previous section
-                if (currentSection) {
-                    sections.push({
-                        title: currentSection,
-                        content: currentContent.join('\n').trim()
-                    });
-                }
-                // Start new section
-                currentSection = headingMatch[1];
-                currentContent = [];
-            } else if (currentSection) {
-                currentContent.push(line);
-            }
-        }
-
-        // Save last section
-        if (currentSection) {
-            sections.push({
-                title: currentSection,
-                content: currentContent.join('\n').trim()
-            });
-        }
-
-        return sections;
-    }
-
-    // Parse documentation markdown with preview block support
-    function parseDocMarkdown(text) {
-        // First, extract preview blocks before other parsing
-        const previewBlocks = [];
-        text = text.replace(/~~~preview\n([\s\S]*?)~~~/g, (_match, code) => {
-            previewBlocks.push(code.trim());
-            return `%%PREVIEW${previewBlocks.length - 1}%%`;
-        });
-
-        // Parse remaining markdown normally
-        let html = parseMarkdown(text);
-
-        // Restore preview blocks as interactive components
-        previewBlocks.forEach((code, i) => {
-            const previewHtml = `
-                <div class="preview-container">
-                    <div class="preview-render">${code}</div>
-                    <div class="preview-code"><pre><code>${escapeHtml(code)}</code></pre></div>
-                </div>
-            `;
-            html = html.replace(`<p>%%PREVIEW${i}%%</p>`, previewHtml);
-            html = html.replace(`%%PREVIEW${i}%%`, previewHtml);
-        });
-
-        return html;
-    }
-
-    // Render documentation tabs
-    function renderDocTabs(sections, activeIndex) {
-        const tabsHtml = sections.map((section, i) => {
-            const activeClass = i === activeIndex ? 'active' : '';
-            return `<li class="tab-item"><button type="button" class="tab-link ${activeClass}" data-doc-tab="${i}">${escapeHtml(section.title)}</button></li>`;
-        }).join('');
-
-        return `
-            <div class="tabs-container docs-tabs">
-                <ul class="tabs">
-                    ${tabsHtml}
-                </ul>
-            </div>
-        `;
-    }
-
-    // Render full documentation page
-    function renderDocPage(doc, content) {
-        const sections = parseDocSections(content);
-
-        if (sections.length === 0) {
-            // No sections found, render as single page
-            return `
-                <article class="docs-article">
-                    <div class="docs-content post-content">
-                        ${parseDocMarkdown(content)}
-                    </div>
-                </article>
-            `;
-        }
-
-        // Render with tabs
-        const tabsHtml = renderDocTabs(sections, 0);
-        const sectionsHtml = sections.map((section, i) => `
-            <div class="docs-section ${i === 0 ? 'active' : ''}" data-doc-section="${i}">
-                ${parseDocMarkdown(section.content)}
-            </div>
-        `).join('');
-
-        return `
-            <article class="docs-article">
-                ${tabsHtml}
-                <div class="docs-content post-content">
-                    ${sectionsHtml}
-                </div>
-            </article>
-        `;
-    }
-
-    // Initialize doc tab switching
-    function initDocTabSwitching() {
-        document.addEventListener('click', function(e) {
-            const tabLink = e.target.closest('[data-doc-tab]');
-            if (!tabLink) return;
-
-            e.preventDefault();
-            const tabIndex = parseInt(tabLink.getAttribute('data-doc-tab'), 10);
-
-            // Update active tab
-            document.querySelectorAll('.docs-tabs .tab-link').forEach((tab, i) => {
-                tab.classList.toggle('active', i === tabIndex);
-            });
-
-            // Update active section
-            document.querySelectorAll('.docs-section').forEach((section, i) => {
-                section.classList.toggle('active', i === tabIndex);
-            });
-        });
-    }
-
-    // ============================================================
     // FETCH AND DISPLAY CONTENT
     // ============================================================
     async function loadPosts() {
@@ -748,34 +577,6 @@
             return content;
         } catch (error) {
             log.error('Error loading post: ' + error.message);
-            throw error;
-        }
-    }
-
-    async function loadDocs() {
-        if (docsData) return docsData;
-
-        try {
-            const response = await fetch(CONFIG.docsFile);
-            if (!response.ok) throw new Error('Unable to load docs.json');
-            docsData = await response.json();
-            log.success(`Loaded ${docsData.length} docs`);
-            return docsData;
-        } catch (error) {
-            log.warn('No docs.json found or error loading: ' + error.message);
-            return [];
-        }
-    }
-
-    async function loadDocContent(slug) {
-        try {
-            const response = await fetch(`${CONFIG.docsDir}${slug}.md`);
-            if (!response.ok) throw new Error(`Doc file not found: ${slug}.md`);
-            const content = await response.text();
-            log.info(`Loaded doc: ${slug}`);
-            return content;
-        } catch (error) {
-            log.error('Error loading doc: ' + error.message);
             throw error;
         }
     }
@@ -839,13 +640,9 @@
 
                 // Render content based on active tab
                 let tabContent = '';
-                const docs = await loadDocs();
                 switch(activeTab) {
                     case 'troubleshooting':
                         tabContent = renderTroubleshooting(posts);
-                        break;
-                    case 'design-system':
-                        tabContent = renderDesignSystem(docs);
                         break;
                     case 'about':
                         tabContent = renderAbout();
@@ -860,47 +657,6 @@
 
                 // Update SEO meta tags for homepage
                 updateMetaTags();
-            } else if (slug.startsWith('docs/')) {
-                // Show documentation page
-                const docSlug = slug.replace('docs/', '');
-                const docs = await loadDocs();
-                const doc = docs.find(d => d.slug === docSlug);
-
-                if (!doc) {
-                    content.innerHTML = `
-                        <div class="post-list-container">
-                            <p class="error">Documentation not found: "${docSlug}"</p>
-                            <p style="margin-top: 1rem;"><a href="#" class="post-list-link">← Back to home</a></p>
-                        </div>
-                    `;
-                    log.warn(`Doc not found in docs.json: ${docSlug}`);
-                    return;
-                }
-
-                const docContent = await loadDocContent(docSlug);
-
-                // Switch to docs header
-                if (!header || !header.classList.contains('docs-header')) {
-                    header = document.querySelector('header');
-                    header.className = 'docs-header';
-                }
-
-                // Update header with doc title
-                header.innerHTML = `
-                    <a href="#" class="back-button" aria-label="Back to home" onclick="localStorage.setItem('activeTab', 'design-system')">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </a>
-                    <h1 class="post-title">${escapeHtml(doc.title)}</h1>
-                    ${doc.description ? `<p class="post-description">${escapeHtml(doc.description)}</p>` : ''}
-                `;
-
-                content.innerHTML = renderDocPage(doc, docContent);
-                document.title = `${doc.title} — Design System — Building Toby Nitro`;
-
-                // Scroll to top
-                window.scrollTo(0, 0);
             } else {
                 // Find and show single post
                 const postIndex = posts.findIndex(p => p.slug === slug);
@@ -1082,9 +838,6 @@
 
     // Initialize tab switching
     initTabSwitching();
-
-    // Initialize doc tab switching
-    initDocTabSwitching();
 
     // Re-render when URL hash changes
     window.addEventListener('hashchange', render);
